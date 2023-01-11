@@ -48,6 +48,7 @@ table {
 }
 a{
 	text-decoration: none;
+	color: black;
 }
 /** end reset css**/
 body {
@@ -213,3 +214,52 @@ footer nav ul {
 	margin: 2em
 }
 
+/********************** Login ****************/
+.div-login{
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+}
+
+.form-login{
+	display: flex;
+	flex-direction: column;
+	text-align: left;
+	width: 30%;
+	margin: 0 auto;
+}
+
+#email, #mot-de-passe, .div-login h2{
+	margin-bottom: 20px;
+}
+label{
+	margin-bottom: 7px;
+}
+input[type="email"], input[type="password"]{
+	width: 100%;
+	font-size: 18px;
+	padding: 10px 0;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+form .button-connecter{
+	border: none;
+	padding: 10px 40px;
+	color: white;
+	background-color: #1D6154;
+	cursor: pointer;
+	border-radius: 60px;
+	width: 180px;
+	margin: 30px auto 0;
+}
+
+.button-connecter:hover{
+	background-color: #1c3f39;
+}
+
+.password-oublie{
+	margin-top: 10px;
+	cursor: pointer;
+	text-decoration: underline;
+}
