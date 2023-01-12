@@ -1,6 +1,13 @@
 const reponse = await fetch("http://localhost:5678/api/works");
 const portfolio = await reponse.json();
+
+const reponse2 = await fetch('http://localhost:5678/api/categories');
+const categories = await reponse2.json();
+
 const gallery = document.querySelector('.gallery');
+
+
+
 
 // Affichage du portfolio
 function genererPortfolio(portfolio){
@@ -25,13 +32,26 @@ function genererPortfolio(portfolio){
         figure.appendChild(titleElement);
     }
 }
+
+// Affichage de la liste pour les filtres
+const listeFiltres = document.querySelector(".liste-filtres");
+for(let i = 0; i < categories.length; i++){
+    const liste = document.createElement('li');
+    const lienListe = document.createElement('a');
+    lienListe.href = ("#");
+    lienListe.setAttribute('id', categories[i].id);
+    lienListe.innerText = categories[i].name;
+    listeFiltres.appendChild(liste);
+    liste.appendChild(lienListe);
+}
+
 genererPortfolio(portfolio);
 
 
 // Filtres du portfolio selon la catégorie
-const buttonObjets = document.querySelector('.objets');
-const buttonAppartements = document.querySelector('.appartements');
-const buttonHotels = document.querySelector('.hotels');
+const buttonObjets = document.getElementById('1');
+const buttonAppartements = document.getElementById('2');
+const buttonHotels = document.getElementById('3');
 const buttonTous = document.querySelector('.tous');
 
 buttonTous.addEventListener('click', function(event){

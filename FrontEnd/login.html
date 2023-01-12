@@ -12,7 +12,7 @@
 </head>
 <body>
     <header>
-        <h1><a href="index.html">Sophie Bluel </a><span>Architecte d'inteérieur</span></h1>
+        <h1><a href="index.html" class="h1">Sophie Bluel </a><span>Architecte d'inteérieur</span></h1>
         <nav>
             <ul>
                 <li>projets</li>
@@ -25,16 +25,19 @@
     <main>
         <div class="div-login">
             <h2>Log In</h2>
-            <form class="form-login">
+            <form class="form-login" method="post">
                 <label for="email">Email</label>
-                <input type="email" id="email">
+                <input type="email" id="email" name="email" required>
+                <p class="error">Merci d'entrer votre email</p>
                 <label for="mot-de-passe">Mot de passe</label>
-                <input type="password" id="mot-de-passe">
+                <input type="password" name="password" id="mot-de-passe" required>
+                <p class="error">Merci d'entrer votre mot de passe</p>
                 <input class="button-connecter" type="submit" value="Se connecter">
             </form>
             <a class="password-oublie" href="#">Mot de passe oublié</a>
         </div>
     </main>
+    <script src="login.js" type="module"></script>
     
 </body>
 </html>

@@ -49,6 +49,7 @@ table {
 a{
 	text-decoration: none;
 	color: black;
+	cursor: pointer;
 }
 /** end reset css**/
 body {
@@ -221,12 +222,29 @@ footer nav ul {
 	flex-direction: column;
 }
 
+.h1{
+	color: #B1663C;
+}
+
 .form-login{
 	display: flex;
 	flex-direction: column;
 	text-align: left;
 	width: 30%;
 	margin: 0 auto;
+}
+
+.form-login p {
+	text-align: center;
+	color: red;	
+	background: rgba(255,0,0,0.1);
+	padding: 5px 8px;
+	border-radius: 3px;
+	border: 1px solid #efa9a9;
+	display: none;
+}
+.form-login p:nth-of-type(1){
+	margin-bottom: 20px;
 }
 
 #email, #mot-de-passe, .div-login h2{
