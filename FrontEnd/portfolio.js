@@ -6,15 +6,12 @@ const categories = await reponse2.json();
 
 const gallery = document.querySelector('.gallery');
 
-
-
-
 // Affichage du portfolio
 function genererPortfolio(portfolio){
     for(let i = 0; i < portfolio.length; i++){
         const work = portfolio[i];
         const figure = document.createElement('figure');
-    
+        
         // Récupération de l'image du portfolio
         const imageElement = document.createElement('img');
         imageElement.src = work.imageUrl;
@@ -32,8 +29,9 @@ function genererPortfolio(portfolio){
         figure.appendChild(titleElement);
     }
 }
+genererPortfolio(portfolio);
 
-// Affichage de la liste pour les filtres
+// Affichage de la liste <li> pour les filtres
 const listeFiltres = document.querySelector(".liste-filtres");
 for(let i = 0; i < categories.length; i++){
     const liste = document.createElement('li');
@@ -45,38 +43,27 @@ for(let i = 0; i < categories.length; i++){
     liste.appendChild(lienListe);
 }
 
-genererPortfolio(portfolio);
-
-
 // Filtres du portfolio selon la catégorie
-const buttonObjets = document.getElementById('1');
-const buttonAppartements = document.getElementById('2');
-const buttonHotels = document.getElementById('3');
-const buttonTous = document.querySelector('.tous');
+const elementButton = document.querySelectorAll('.liste-filtres a');
 
-buttonTous.addEventListener('click', function(event){
-    // annulation du comportement par défaut du lien
-    event.preventDefault();
-    // effacement et regénération de la page filtrée
-    gallery.innerHTML = "";
-    genererPortfolio(portfolio);
-})
-
-function filtrerCategorie(button, category){
-    button.addEventListener('click', function(event){
-        // annulation du comportement par défaut du lien
+for(let i = 0; i < elementButton.length; i++){
+    elementButton[i].addEventListener('click', function(event){
+        // suppresion du comportement par défaut des liens
         event.preventDefault();
-        // trie du portfolio
-        const portfolioFiltres = portfolio.filter(oeuvre => oeuvre.category.name === category);
-        // effacement et regénération de la page filtrée
-        gallery.innerHTML = "";
-        genererPortfolio(portfolioFiltres);
+        // Si on selectionne le bouton avec #tous alors on genère le portfolio complet
+        if(elementButton[i].id === "tous"){
+            genererPortfolio(portfolio);
+        } else {
+            // sinon on filtre le portfolio avec la catégorie qui possède le ID similaire au ID du button sélectionné
+            const portfolioFiltres = portfolio.filter(oeuvre => oeuvre.category.id === Number(elementButton[i].id));
+            // Effacement de la page
+            gallery.innerHTML ="";
+            // Regénération de la page filtrée
+            genererPortfolio(portfolioFiltres);
+        }   
     })
 }
 
-filtrerCategorie(buttonObjets, "Objets");
-filtrerCategorie(buttonAppartements, "Appartements");
-filtrerCategorie(buttonHotels, "Hotels & restaurants");
 
 
 

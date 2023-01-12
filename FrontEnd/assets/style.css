@@ -281,3 +281,7 @@ form .button-connecter{
 	cursor: pointer;
 	text-decoration: underline;
 }
+
+.footer-login{
+	margin-top: 300px;
+}
