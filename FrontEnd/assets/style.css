@@ -247,9 +247,20 @@ footer nav ul {
 	margin-bottom: 20px;
 }
 
-#email, #mot-de-passe, .div-login h2{
+#email, #password, .div-login h2{
 	margin-bottom: 20px;
+	outline: none;
 }
+
+#email:focus, #password:focus{
+border: 2px solid #1D6154;
+}
+
+#email:not(:focus):invalid{
+	background-color: #e2406b;
+	border: 2px solid #b20a37;
+}
+
 label{
 	margin-bottom: 7px;
 }
@@ -281,6 +292,7 @@ form .button-connecter{
 	cursor: pointer;
 	text-decoration: underline;
 }
+
 
 .footer-login{
 	margin-top: 300px;
