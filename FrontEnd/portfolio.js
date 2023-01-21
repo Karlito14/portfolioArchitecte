@@ -1,3 +1,5 @@
+import {token} from './login.js';
+
 const reponse = await fetch("http://localhost:5678/api/works");
 const portfolio = await reponse.json();
 
@@ -34,11 +36,14 @@ genererPortfolio(portfolio);
 // Affichage de la liste <li> pour les filtres
 const listeFiltres = document.querySelector(".liste-filtres");
 for(let i = 0; i < categories.length; i++){
+    // Création des éléments pour notre liste
     const liste = document.createElement('li');
     const lienListe = document.createElement('a');
+    // Attribution à ces liste d'un href, un id, et du texte
     lienListe.href = ("#");
     lienListe.setAttribute('id', categories[i].id);
     lienListe.innerText = categories[i].name;
+    //Rattachement au DOM
     listeFiltres.appendChild(liste);
     liste.appendChild(lienListe);
 }
@@ -63,6 +68,7 @@ for(let i = 0; i < elementButton.length; i++){
         }   
     })
 }
+
 
 
 
