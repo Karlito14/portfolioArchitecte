@@ -1,5 +1,5 @@
-export let token;
 const formulaireLogin = document.querySelector(".form-login");
+let token;
 
 formulaireLogin.addEventListener('submit', async function (event) {
     const errorEmail = document.querySelector('.error-email');
@@ -40,9 +40,13 @@ formulaireLogin.addEventListener('submit', async function (event) {
         if (reponse.ok) {
             const result = await reponse.json();
             token = result.token;
+            // stockage du token dans le local storage
+            window.localStorage.setItem('token', token);
             window.location.replace('./index.html');
         } else {
             errorLogin.style.display = 'inline-block';
         }
     }
 })
+
+

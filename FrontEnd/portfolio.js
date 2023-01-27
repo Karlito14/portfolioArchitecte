@@ -1,5 +1,3 @@
-import {token} from './login.js';
-
 const reponse = await fetch("http://localhost:5678/api/works");
 const portfolio = await reponse.json();
 
@@ -69,9 +67,57 @@ for(let i = 0; i < elementButton.length; i++){
     })
 }
 
+// récupération de la valeur du token
+const token = window.localStorage.getItem('token');
 
+if(token){
+    const body = document.querySelector('body');
+    const edition = document.createElement('div');
+    edition.classList.add('div-edition');
+    body.prepend(edition);
 
+    const iconEdition = document.createElement('i');
+    iconEdition.classList.add("fa-regular", "fa-pen-to-square");
+    edition.appendChild(iconEdition);
 
+    const paragrapheEdition = document.createElement('p');
+    paragrapheEdition.classList.add('paragraphe-edition');
+    paragrapheEdition.textContent = "Mode edition";
+    edition.appendChild(paragrapheEdition);
+
+    const lienEdition = document.createElement('a');
+    lienEdition.href = '#';
+    lienEdition.classList.add('lien-edition');
+    lienEdition.textContent = "publier les changements";
+    edition.appendChild(lienEdition);
+
+    const intro = document.querySelector("#introduction");
+    intro.style.alignItems = 'start';
+
+    const figureIntro = document.querySelector('.figure-intro');
+    const copieIcon = iconEdition.cloneNode();
+    copieIcon.classList.add('icon-image')
+    figureIntro.appendChild(copieIcon);
+
+    const lienModifier = document.createElement('a');
+    lienModifier.href = '#';
+    lienModifier.textContent = "modifier";
+    figureIntro.appendChild(lienModifier);
+
+    const articleIntro = document.querySelector('.article-intro');
+    const copieIcon2 = copieIcon.cloneNode();
+    copieIcon2.classList.add('icon-article')
+    const copieLienModifier = lienModifier.cloneNode(true);
+    articleIntro.prepend(copieLienModifier);
+    articleIntro.prepend(copieIcon2);
+
+    const h2Portofolio = document.querySelector('#portfolio h2');
+    const copieIcon3 = copieIcon.cloneNode();
+    copieIcon3.classList.add('icon-portfolio');
+    const copieLienModifier2 = lienModifier.cloneNode(true);
+    h2Portofolio.after(copieLienModifier2);
+    h2Portofolio.after(copieIcon3);
+}
 
 
 
