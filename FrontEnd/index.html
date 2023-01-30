@@ -12,6 +12,20 @@
 	<script src="https://kit.fontawesome.com/a8c57682fc.js" crossorigin="anonymous"></script>
 </head>
 <body>
+	
+	<!----------- Partie Modale -------->
+	<aside id="modal" aria-hidden="true" role="dialog" aria-labelledby="titre-galerie">
+		<div class="modal-wrapper">
+			<a href="#" class="lien-icon"><i class="fa-solid fa-xmark"></i></a>
+			<div class="container">
+				<h2 id="titre-galerie">Galerie photo</h2>
+				<div class="galerie-photo"></div>
+				<a href="#" class="ajout-photo">Ajouter une photo</a>
+				<a href="#" class="supprimer-galerie">Supprimer la galerie</a>
+			</div>
+		</div>
+	</aside>
+
 	<div class="div-body">
 		<header>
 			<h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
@@ -61,6 +75,8 @@
 			</section>
 		</main>
 
+		
+
 		<footer>
 			<nav>
 				<ul>
@@ -69,8 +85,13 @@
 			</nav>
 		</footer>
 	</div>
+	
+
+
 <script src="portfolio.js" type="module"></script>
+<script src="modal.js" type="module"></script>
 <script src="modeEdition.js"></script>
+
 
 </body>
 </html>

@@ -49,7 +49,8 @@ if(token){
     const h2Portofolio = document.querySelector('#portfolio h2');
     const copieIcon3 = iconEdition.cloneNode();
     copieIcon3.classList.add('icon-portfolio');
-    const copieLienModifier2 = lienModifier.cloneNode(true);
-    h2Portofolio.after(copieLienModifier2);
+    const lienModifierH2 = lienModifier.cloneNode(true);
+    lienModifierH2.href = '#modal';
+    h2Portofolio.after(lienModifierH2);
     h2Portofolio.after(copieIcon3);
 }
