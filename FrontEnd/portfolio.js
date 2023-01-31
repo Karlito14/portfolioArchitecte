@@ -39,7 +39,9 @@ for(let i = 0; i < categories.length; i++){
     const lienListe = document.createElement('a');
     // Attribution à ces liste d'un href, un id, et du texte
     lienListe.href = ("#");
-    lienListe.setAttribute('id', categories[i].id);
+    // remplacement des espaces du titre pour l'ajouter en "class" au lien
+    const titreSansEspaces = categories[i].name.replaceAll(' ','-');
+    lienListe.setAttribute('id', titreSansEspaces);
     lienListe.innerText = categories[i].name;
     //Rattachement au DOM
     listeFiltres.appendChild(liste);
@@ -55,10 +57,12 @@ for(let i = 0; i < elementButton.length; i++){
         event.preventDefault();
         // Si on selectionne le bouton avec #tous alors on genère le portfolio complet
         if(elementButton[i].id === "tous"){
+            gallery.innerHTML = "";
             genererPortfolio(portfolio);
         } else {
-            // sinon on filtre le portfolio avec la catégorie qui possède le ID similaire au ID du button sélectionné
-            const portfolioFiltres = portfolio.filter(oeuvre => oeuvre.category.id === Number(elementButton[i].id));
+            // sinon on filtre le portfolio avec la catégorie qui possède le ID similaire au ID du button sélectionné 
+            const portfolioFiltres = portfolio.filter(oeuvre =>
+                oeuvre.category.name.replaceAll(' ', '-') === elementButton[i].id) 
             // Effacement de la page
             gallery.innerHTML ="";
             // Regénération de la page filtrée

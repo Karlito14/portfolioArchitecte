@@ -8,21 +8,25 @@ if(token){
     edition.classList.add('div-edition');
     body.prepend(edition);
 
+    // Création de l'icone stylo dans la div noire
     const iconEdition = document.createElement('i');
     iconEdition.classList.add("fa-regular", "fa-pen-to-square");
     edition.appendChild(iconEdition);
 
+    // Création du paragraphe "mode édition" dans la div noire
     const paragrapheEdition = document.createElement('p');
     paragrapheEdition.classList.add('paragraphe-edition');
     paragrapheEdition.textContent = "Mode edition";
     edition.appendChild(paragrapheEdition);
 
+    // Création du lien "publier les changements" dans la div noire
     const lienEdition = document.createElement('a');
     lienEdition.href = '#';
     lienEdition.classList.add('lien-edition');
     lienEdition.textContent = "publier les changements";
     edition.appendChild(lienEdition);
 
+    // Alignement de la présentation avec l'image
     const intro = document.querySelector("#introduction");
     intro.style.alignItems = 'start';
 
@@ -51,6 +55,7 @@ if(token){
     copieIcon3.classList.add('icon-portfolio');
     const lienModifierH2 = lienModifier.cloneNode(true);
     lienModifierH2.href = '#modal';
+    lienModifierH2.classList.add('js-modal');
     h2Portofolio.after(lienModifierH2);
     h2Portofolio.after(copieIcon3);
 }

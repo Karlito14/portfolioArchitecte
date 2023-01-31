@@ -426,6 +426,7 @@ form .button-connecter {
 	text-align: center;
 	padding: 20px;
 	color: white;
+	position: static;
 }
 
 .paragraphe-edition {
@@ -466,7 +467,7 @@ form .button-connecter {
 	height: 100%;
 	position: fixed;
 	background-color: rgba(0, 0, 0, 0.3);
-	display: flex;
+	display: none;
 	align-items: center;
 	justify-content: center;
 }
@@ -478,10 +479,13 @@ form .button-connecter {
 	position: relative;
 }
 
-.lien-icon{
+.fermeture-modal{
 	position: absolute;
 	top: 15px;
 	right: 20px;
+	cursor: pointer;
+	border: none;
+	background-color: white;
 }
 
 .container{
@@ -501,6 +505,11 @@ form .button-connecter {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 	width: 70%;
+	gap: 13px;
+}
+
+.galerie-photo div{
+	position: relative;
 }
 
 .ajout-photo{
@@ -518,7 +527,26 @@ form .button-connecter {
 }
 
 .img-galerie{
-	
 	height: 100px;
-	display: block;
+	width: 100%;
+}
+
+.lien-corbeille{
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background-color: #000;
+	color: white;
+	padding: 4px;
+	border-radius: 2px;
+}
+
+.lien-agrandir{
+	position: absolute;
+	top: 5px;
+	right: 30px;
+	background-color: #000;
+	color: white;
+	padding: 4px;
+	border-radius: 2px;
 }
