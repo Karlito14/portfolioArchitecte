@@ -90,6 +90,9 @@ video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+}
+
+*{
 	box-sizing: border-box;
 }
 
@@ -461,8 +464,8 @@ form .button-connecter {
 	margin-right: 10px;
 }
 
-/******************* Modale ***********************/
-#modal{
+/******************* Modale galerie Photo ***********************/
+#modal-galerie-photo{
 	width: 100%;
 	height: 100%;
 	position: fixed;
@@ -493,7 +496,7 @@ form .button-connecter {
 	flex-direction: column;
 	align-items: center;
 }
-#titre-galerie{
+#titre-galerie-photo{
 	margin-top: 60px;
 	margin-bottom: 40px;
 	color: #000;
@@ -519,6 +522,11 @@ form .button-connecter {
 	color: white;
 	border-radius: 60px;
 	padding: 10px 40px;
+	transition: all 0.3s;
+}
+
+.ajout-photo:hover{
+	background-color: #1c3f39;
 }
 
 .supprimer-galerie{
@@ -539,6 +547,7 @@ form .button-connecter {
 	color: white;
 	padding: 4px;
 	border-radius: 2px;
+	transition: all 0.3s;
 }
 
 .lien-agrandir{
@@ -549,4 +558,109 @@ form .button-connecter {
 	color: white;
 	padding: 4px;
 	border-radius: 2px;
+	transition: all 0.3s;
+}
+
+.lien-agrandir:hover, .lien-corbeille:hover{
+	color: #1D6154;
+}
+
+
+/******************* Modale ajout Photo ***********************/
+#modal-ajout-photo{
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.3);
+	display: none;
+	align-items: center;
+	justify-content: center;
+}
+
+.retour-arriere{
+	position: absolute;
+    top: 15px;
+    left: 20px;
+    cursor: pointer;
+    border: none;
+    background-color: white;
+}
+
+.div-ajouter-photo{
+	background-color: #E8F1F6;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	width: 70%;
+	padding: 20px;
+}
+
+#titre-ajout-photo{
+	margin-top: 60px;
+	margin-bottom: 40px;
+	color: #000;
+}
+
+.icon-photo{
+	font-size: 50px;
+	color: #B9C5CC;
+}
+
+.ajouter-photo{
+	padding: 10px 30px;
+	color: #306685;
+	border-radius: 50px;
+	background-color: #CBD6DC;
+	border: none;
+	margin: 20px 100px 10px;
+	cursor: pointer;
+}
+
+.formulaire-ajout-photo{
+	text-align: center;
+	margin-top: 30px;
+	margin-bottom: 50px;
+	width: 70%;
+}
+
+.formulaire-ajout-photo div{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	border-bottom: 1px solid #B3B3B3;
+	margin-bottom: 30px;
+}
+
+.formulaire-ajout-photo label{
+	 color: #3D3D3D;
+	 margin-bottom: 10px;
+	 font-weight: 500;
+}
+
+#titre-photo{
+	width: 100%;
+	margin-bottom: 20px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+	padding: 10px;
+}
+
+#categorie-photo{
+	width: 100%;
+	margin-bottom: 40px;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border: none;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.valider-ajout-photo{
+	width: 50%;
+	text-align: center;
+	background-color: #A7A7A7;
+	border-radius: 60px;
+	padding: 10px 50px;
+	color: white;
+	border: none;
+	cursor: pointer;
 }

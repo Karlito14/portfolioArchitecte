@@ -2,6 +2,9 @@
 const token = window.localStorage.getItem('token');
 // Afichage des liens "modifier" dans le mode édition
 if(token){
+    // Effacement des catégories
+    const listeFiltres = document.querySelector('.liste-filtres');
+    listeFiltres.style.display ="none";
     //  Ajout de la div edition noire en haut de page
     const body = document.querySelector('body');
     const edition = document.createElement('div');
@@ -54,7 +57,7 @@ if(token){
     const copieIcon3 = iconEdition.cloneNode();
     copieIcon3.classList.add('icon-portfolio');
     const lienModifierH2 = lienModifier.cloneNode(true);
-    lienModifierH2.href = '#modal';
+    lienModifierH2.href = '#modal-galerie-photo';
     lienModifierH2.classList.add('js-modal');
     h2Portofolio.after(lienModifierH2);
     h2Portofolio.after(copieIcon3);
