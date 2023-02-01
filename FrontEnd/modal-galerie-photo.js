@@ -1,11 +1,13 @@
 const reponse = await fetch("http://localhost:5678/api/works");
 const portfolio = await reponse.json();
 
+const token = window.localStorage.getItem('token');
+
 const modalGaleriePhoto = document.querySelector('#modal-galerie-photo');
 const lienOuvrirModal = document.querySelector('.js-modal');
 const croixFermetureModal = document.querySelectorAll('.fermeture-modal');
 const modalWrapper = document.querySelector('.modal-wrapper');
-console.log(croixFermetureModal)
+
 const focusableSelector = "button, a, input, textarea, select";
 let focusables = [];
 
@@ -129,6 +131,28 @@ const afficherGalerieModale = () => {
 }
 
 afficherGalerieModale();
+
+// suppresion de travaux
+const elementsIconeCorbeille = document.querySelectorAll('.lien-corbeille');
+
+const supprimerTravaux = async (id) => {
+    const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
+        method : 'DELETE',
+        headers : {
+            authorization : `Bearer ${token}`
+        }
+    })
+}
+
+for(let i = 0; i < elementsIconeCorbeille.length; i++){
+    elementsIconeCorbeille[i].addEventListener('click', (event) => {
+        event.preventDefault();
+        const travauxSelectionne = portfolio.filter(oeuvre => oeuvre.title.toLowerCase().replaceAll(' ', '-') === elementsIconeCorbeille[i].classList[0]);
+        const idImage = travauxSelectionne[0].id;
+        supprimerTravaux(idImage);
+        fermetureModal(modalGaleriePhoto);
+    })
+}
 
 
 // Passer à la modal ajout photo

@@ -6,10 +6,10 @@ if(token){
     const listeFiltres = document.querySelector('.liste-filtres');
     listeFiltres.style.display ="none";
     //  Ajout de la div edition noire en haut de page
-    const body = document.querySelector('body');
+    const asideAjoutPhoto = document.querySelector('#modal-ajout-photo');
     const edition = document.createElement('div');
     edition.classList.add('div-edition');
-    body.prepend(edition);
+    asideAjoutPhoto.after(edition);
 
     // Création de l'icone stylo dans la div noire
     const iconEdition = document.createElement('i');
