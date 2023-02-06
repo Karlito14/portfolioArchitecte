@@ -1,6 +1,9 @@
 const reponse = await fetch("http://localhost:5678/api/works");
 const portfolio = await reponse.json();
 
+const reponse2 = await fetch('http://localhost:5678/api/categories');
+const categories = await reponse2.json();
+
 const token = window.localStorage.getItem('token');
 
 const modalGaleriePhoto = document.querySelector('#modal-galerie-photo');
@@ -154,7 +157,6 @@ for(let i = 0; i < elementsIconeCorbeille.length; i++){
     })
 }
 
-
 // Passer à la modal ajout photo
 const boutonAjouterPhoto = document.querySelector(".ajout-photo");
 const modalAjoutPhoto = document.querySelector("#modal-ajout-photo");
@@ -181,3 +183,96 @@ modalAjoutPhoto.addEventListener('click', (event) => {
 
 const wrapperAjoutPhoto = document.querySelector('.modal-wrapper-ajout-photo');
 wrapperAjoutPhoto.addEventListener('click', event => event.stopPropagation());
+
+// Ajout de la liste des categories dans la modal
+const selectCategories = document.querySelector('#categorie-photo');
+const optionCategorie = document.createElement('option');
+selectCategories.appendChild(optionCategorie);
+
+for(let categorie of categories){
+    const optionCategorie = document.createElement('option');
+    optionCategorie.value = categorie.name;
+    optionCategorie.textContent = categorie.name;
+    selectCategories.appendChild(optionCategorie);
+}
+
+// Ajouter un projet au back end
+const formulaireAjoutProjet = document.querySelector('.formulaire-ajout-photo');
+
+// Création du FormData
+const formData = new FormData(formulaireAjoutProjet);
+
+const divAjouterPhoto = document.querySelector('.div-ajouter-photo');
+const chargerImage = document.querySelector("#charger-image");
+const titreImage = document.querySelector('#titre-photo');
+const categorieImage = document.querySelector('#categorie-photo');
+
+// Ajout de l'image dans le formdata une fois chargé
+chargerImage.addEventListener('change', () => {
+    const fichier = chargerImage.files[0];
+    const imageChargee = document.createElement('img');
+    const reader = new FileReader();
+    reader.readAsDataURL(fichier);
+    reader.onload = () => {
+        imageChargee.src = reader.result;
+    }
+    imageChargee.alt = fichier.name;
+    imageChargee.classList.add('image-chargee');
+    divAjouterPhoto.innerHTML = "";
+    divAjouterPhoto.appendChild(imageChargee);
+    divAjouterPhoto.style.padding = "0 20px";
+    formData.append('image', fichier, fichier.name);
+    changerCouleurBouttonValider();
+})
+
+// Ajout du titre et de la cateorie de l'image dans le formdata
+titreImage.addEventListener('change', () => {
+    formData.append('title', titreImage.value);
+    changerCouleurBouttonValider();
+})
+
+categorieImage.addEventListener('change', () => {
+    formData.append('category', categorieImage.value);changerCouleurBouttonValider();
+})
+
+const buttonValider = document.querySelector('.valider-ajout-projet');
+
+// changer la couleur du bouton valider si tout est bien rempli
+const changerCouleurBouttonValider = () => {
+    if(titreImage.value && categorieImage.value && chargerImage.files[0]){
+        buttonValider.style.backgroundColor = "#1D6154";
+    }
+}
+
+
+buttonValider.addEventListener('click', async (event) => {
+    event.preventDefault();
+    const errorImageModal = document.querySelector('.error-image-modal');
+    errorImageModal.style.display = 'none';
+    const errorTitreModal = document.querySelector('.error-titre-modal');
+    errorTitreModal.style.display = 'none';
+    const errorCategorieModal = document.querySelector('.error-categorie-modal');
+    errorCategorieModal.style.display = 'none';
+    if(!titreImage.value || !categorieImage.value || !chargerImage.files[0]){
+        if(!chargerImage.files[0]){
+            errorImageModal.style.display = 'block';
+        }
+        if(!titreImage.value){
+            errorTitreModal.style.display = 'block';
+        }
+        if(!categorieImage.value){
+            errorCategorieModal.style.display = 'block';
+            categorieImage.style.marginBottom = '20px';
+        }
+    } else {
+        await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                accept : "application/json",
+                authorization : `Bearer ${token}`
+            },
+            body: formData
+        })
+        .then(response => console.log(response))
+    }   
+})

@@ -334,6 +334,10 @@ footer nav ul {
 }
 
 /********************** Login ****************/
+.header-login{
+	max-width: 1140px;
+	margin:  50px auto;
+}
 .div-login {
 	text-align: center;
 	display: flex;
@@ -352,7 +356,7 @@ footer nav ul {
 	margin: 0 auto;
 }
 
-.form-login p {
+.form-login p, .error-titre-modal, .error-image-modal, .error-categorie-modal {
 	text-align: center;
 	color: red;
 	background: rgba(255, 0, 0, 0.1);
@@ -593,6 +597,7 @@ form .button-connecter {
 	text-align: center;
 	width: 70%;
 	padding: 20px;
+	margin: 0 auto 30px;
 }
 
 #titre-ajout-photo{
@@ -601,29 +606,43 @@ form .button-connecter {
 	color: #000;
 }
 
+.error-titre-modal, .error-image-modal, .error-categorie-modal{
+	margin-bottom: 15px;
+	width: 100%;
+}
+
 .icon-photo{
 	font-size: 50px;
 	color: #B9C5CC;
 }
 
-.ajouter-photo{
+.label-charger-image{
 	padding: 10px 30px;
 	color: #306685;
 	border-radius: 50px;
 	background-color: #CBD6DC;
 	border: none;
-	margin: 20px 100px 10px;
+	margin: 20px auto;
+	width: 70%;
 	cursor: pointer;
+}
+
+input[type='file']{
+	display: none;
+}
+
+.image-chargee{
+	max-height: 200px;
+	object-fit: contain;
 }
 
 .formulaire-ajout-photo{
 	text-align: center;
-	margin-top: 30px;
 	margin-bottom: 50px;
 	width: 70%;
 }
 
-.formulaire-ajout-photo div{
+.div-input-ajout-photo{
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -654,7 +673,7 @@ form .button-connecter {
 	cursor: pointer;
 }
 
-.valider-ajout-photo{
+.valider-ajout-projet{
 	width: 50%;
 	text-align: center;
 	background-color: #A7A7A7;
