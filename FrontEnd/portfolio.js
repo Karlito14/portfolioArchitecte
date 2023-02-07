@@ -7,8 +7,9 @@ const categories = await reponse2.json();
 const gallery = document.querySelector('.gallery');
 
 // Affichage du portfolio
-function genererPortfolio(portfolio){
+export function genererPortfolio(portfolio){
     for(let i = 0; i < portfolio.length; i++){
+
         const work = portfolio[i];
         const figure = document.createElement('figure');
         

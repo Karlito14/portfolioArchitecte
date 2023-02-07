@@ -1,3 +1,4 @@
+import {genererPortfolio} from './portfolio.js'
 const reponse = await fetch("http://localhost:5678/api/works");
 const portfolio = await reponse.json();
 
@@ -5,6 +6,7 @@ const reponse2 = await fetch('http://localhost:5678/api/categories');
 const categories = await reponse2.json();
 
 const token = window.localStorage.getItem('token');
+const gallery = document.querySelector('.gallery');
 
 const modalGaleriePhoto = document.querySelector('#modal-galerie-photo');
 const lienOuvrirModal = document.querySelector('.js-modal');
@@ -154,6 +156,8 @@ for(let i = 0; i < elementsIconeCorbeille.length; i++){
         const idImage = travauxSelectionne[0].id;
         supprimerTravaux(idImage);
         fermetureModal(modalGaleriePhoto);
+        gallery.innerHTML = "";
+        genererPortfolio(portfolio);
     })
 }
 
@@ -192,15 +196,15 @@ selectCategories.appendChild(optionCategorie);
 for(let categorie of categories){
     const optionCategorie = document.createElement('option');
     optionCategorie.value = categorie.name;
+    optionCategorie.setAttribute('id', categorie.id);
     optionCategorie.textContent = categorie.name;
     selectCategories.appendChild(optionCategorie);
 }
 
 // Ajouter un projet au back end
-const formulaireAjoutProjet = document.querySelector('.formulaire-ajout-photo');
 
 // Création du FormData
-const formData = new FormData(formulaireAjoutProjet);
+const formData = new FormData();
 
 const divAjouterPhoto = document.querySelector('.div-ajouter-photo');
 const chargerImage = document.querySelector("#charger-image");
@@ -232,7 +236,12 @@ titreImage.addEventListener('change', () => {
 })
 
 categorieImage.addEventListener('change', () => {
-    formData.append('category', categorieImage.value);changerCouleurBouttonValider();
+    for(let categorie of categories){
+        if(categorie.name === categorieImage.value){
+            formData.append('category', categorie.id);
+        }
+    }
+    changerCouleurBouttonValider();
 })
 
 const buttonValider = document.querySelector('.valider-ajout-projet');
@@ -241,6 +250,8 @@ const buttonValider = document.querySelector('.valider-ajout-projet');
 const changerCouleurBouttonValider = () => {
     if(titreImage.value && categorieImage.value && chargerImage.files[0]){
         buttonValider.style.backgroundColor = "#1D6154";
+    } else {
+        buttonValider.style.backgroundColor = "#A7A7A7";
     }
 }
 
@@ -265,7 +276,7 @@ buttonValider.addEventListener('click', async (event) => {
             categorieImage.style.marginBottom = '20px';
         }
     } else {
-        await fetch("http://localhost:5678/api/works", {
+        const reponse = await fetch("http://localhost:5678/api/works", {
             method: "POST",
             headers: {
                 accept : "application/json",
@@ -273,6 +284,8 @@ buttonValider.addEventListener('click', async (event) => {
             },
             body: formData
         })
-        .then(response => console.log(response))
+        fermetureModal(modalAjoutPhoto);
+        gallery.innerHTML = "";
+        genererPortfolio(portfolio);
     }   
 })
