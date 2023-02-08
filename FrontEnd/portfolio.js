@@ -8,6 +8,7 @@ const gallery = document.querySelector('.gallery');
 
 // Affichage du portfolio
 export function genererPortfolio(portfolio){
+    gallery.innerHTML = "";
     for(let i = 0; i < portfolio.length; i++){
 
         const work = portfolio[i];

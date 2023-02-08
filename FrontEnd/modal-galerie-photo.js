@@ -1,4 +1,4 @@
-import {genererPortfolio} from './portfolio.js'
+import { genererPortfolio } from './portfolio.js';
 const reponse = await fetch("http://localhost:5678/api/works");
 const portfolio = await reponse.json();
 
@@ -6,7 +6,6 @@ const reponse2 = await fetch('http://localhost:5678/api/categories');
 const categories = await reponse2.json();
 
 const token = window.localStorage.getItem('token');
-const gallery = document.querySelector('.gallery');
 
 const modalGaleriePhoto = document.querySelector('#modal-galerie-photo');
 const lienOuvrirModal = document.querySelector('.js-modal');
@@ -50,13 +49,14 @@ lienOuvrirModal.addEventListener('click', (event) => {
     event.preventDefault();
     ouvertureModal(modalGaleriePhoto);
 });
-for(let i = 0; i < croixFermetureModal.length; i++){
+
+for (let i = 0; i < croixFermetureModal.length; i++) {
     croixFermetureModal[i].addEventListener("click", (event) => {
         event.preventDefault();
-        if(modalGaleriePhoto.style.display === 'flex'){
+        if (modalGaleriePhoto.style.display === 'flex') {
             fermetureModal(modalGaleriePhoto);
         }
-        if(modalAjoutPhoto.style.display === 'flex'){
+        if (modalAjoutPhoto.style.display === 'flex') {
             fermetureModal(modalAjoutPhoto);
         }
     });
@@ -88,9 +88,11 @@ window.addEventListener('keydown', (event) => {
 
 
 // Afficher les travaux dans la modal
-const afficherGalerieModale = () => {
-    for (let i = 0; i < portfolio.length; i++) {
-        const work = portfolio[i];
+const afficherGalerieModale = (tableau) => {
+    const galeriePhoto = document.querySelector('.galerie-photo');
+    galeriePhoto.innerHTML = "";
+    for (let i = 0; i < tableau.length; i++) {
+        const work = tableau[i];
 
         const divImg = document.createElement('div');
 
@@ -135,29 +137,30 @@ const afficherGalerieModale = () => {
     }
 }
 
-afficherGalerieModale();
+afficherGalerieModale(portfolio);
 
 // suppresion de travaux
 const elementsIconeCorbeille = document.querySelectorAll('.lien-corbeille');
 
 const supprimerTravaux = async (id) => {
     const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
-        method : 'DELETE',
-        headers : {
-            authorization : `Bearer ${token}`
+        method: 'DELETE',
+        headers: {
+            authorization: `Bearer ${token}`
         }
     })
 }
 
-for(let i = 0; i < elementsIconeCorbeille.length; i++){
+for (let i = 0; i < elementsIconeCorbeille.length; i++) {
     elementsIconeCorbeille[i].addEventListener('click', (event) => {
         event.preventDefault();
         const travauxSelectionne = portfolio.filter(oeuvre => oeuvre.title.toLowerCase().replaceAll(' ', '-') === elementsIconeCorbeille[i].classList[0]);
         const idImage = travauxSelectionne[0].id;
         supprimerTravaux(idImage);
         fermetureModal(modalGaleriePhoto);
-        gallery.innerHTML = "";
-        genererPortfolio(portfolio);
+        const portfolioFiltre = portfolio.filter(oeuvre => oeuvre.id !== idImage);
+        genererPortfolio(portfolioFiltre);
+        afficherGalerieModale(portfolioFiltre);
     })
 }
 
@@ -165,7 +168,7 @@ for(let i = 0; i < elementsIconeCorbeille.length; i++){
 const boutonAjouterPhoto = document.querySelector(".ajout-photo");
 const modalAjoutPhoto = document.querySelector("#modal-ajout-photo");
 
-boutonAjouterPhoto.addEventListener('click', (event) =>{
+boutonAjouterPhoto.addEventListener('click', (event) => {
     event.preventDefault();
     fermetureModal(modalGaleriePhoto);
     ouvertureModal(modalAjoutPhoto);
@@ -193,10 +196,9 @@ const selectCategories = document.querySelector('#categorie-photo');
 const optionCategorie = document.createElement('option');
 selectCategories.appendChild(optionCategorie);
 
-for(let categorie of categories){
+for (let categorie of categories) {
     const optionCategorie = document.createElement('option');
     optionCategorie.value = categorie.name;
-    optionCategorie.setAttribute('id', categorie.id);
     optionCategorie.textContent = categorie.name;
     selectCategories.appendChild(optionCategorie);
 }
@@ -236,25 +238,24 @@ titreImage.addEventListener('change', () => {
 })
 
 categorieImage.addEventListener('change', () => {
-    for(let categorie of categories){
-        if(categorie.name === categorieImage.value){
+    for (let categorie of categories) {
+        if (categorie.name === categorieImage.value) {
             formData.append('category', categorie.id);
         }
     }
     changerCouleurBouttonValider();
 })
 
-const buttonValider = document.querySelector('.valider-ajout-projet');
-
 // changer la couleur du bouton valider si tout est bien rempli
 const changerCouleurBouttonValider = () => {
-    if(titreImage.value && categorieImage.value && chargerImage.files[0]){
+    if (titreImage.value && categorieImage.value && chargerImage.files[0]) {
         buttonValider.style.backgroundColor = "#1D6154";
     } else {
         buttonValider.style.backgroundColor = "#A7A7A7";
     }
 }
 
+const buttonValider = document.querySelector('.valider-ajout-projet');
 
 buttonValider.addEventListener('click', async (event) => {
     event.preventDefault();
@@ -264,28 +265,54 @@ buttonValider.addEventListener('click', async (event) => {
     errorTitreModal.style.display = 'none';
     const errorCategorieModal = document.querySelector('.error-categorie-modal');
     errorCategorieModal.style.display = 'none';
-    if(!titreImage.value || !categorieImage.value || !chargerImage.files[0]){
-        if(!chargerImage.files[0]){
+    if (!titreImage.value || !categorieImage.value || !chargerImage.files[0]) {
+        if (!chargerImage.files[0]) {
             errorImageModal.style.display = 'block';
         }
-        if(!titreImage.value){
+        if (!titreImage.value) {
             errorTitreModal.style.display = 'block';
         }
-        if(!categorieImage.value){
+        if (!categorieImage.value) {
             errorCategorieModal.style.display = 'block';
             categorieImage.style.marginBottom = '20px';
         }
     } else {
-        const reponse = await fetch("http://localhost:5678/api/works", {
+        const reponse = fetch("http://localhost:5678/api/works", {
             method: "POST",
             headers: {
-                accept : "application/json",
-                authorization : `Bearer ${token}`
+                accept: "application/json",
+                authorization: `Bearer ${token}`
             },
             body: formData
-        })
-        fermetureModal(modalAjoutPhoto);
-        gallery.innerHTML = "";
-        genererPortfolio(portfolio);
-    }   
+            })
+            .then(res => res.json())
+            .then(reponse => {
+                fermetureModal(modalAjoutPhoto);
+                let portfolioAJour = portfolio;
+                let categorieName;
+                for (let categorie of categories) {
+                    if (categorie.id === reponse.categoryId) {
+                        categorieName = categorie.name;
+                    }
+                }
+                portfolioAJour.push(
+                    {
+                        "id": reponse.id,
+                        "title": reponse.title,
+                        "imageUrl": reponse.imageUrl,
+                        "categoryId": reponse.categoryId,
+                        "userId": reponse.userId,
+                        "category":
+                        {
+                            "id": reponse.categoryId,
+                            "name": categorieName
+                        }
+                    }
+                )
+                genererPortfolio(portfolioAJour);
+                afficherGalerieModale(portfolioAJour);        
+            })
+            .catch(error => console.error(error))
+    }
 })
+
