@@ -13,6 +13,7 @@ export function genererPortfolio(portfolio){
 
         const work = portfolio[i];
         const figure = document.createElement('figure');
+        figure.style.textAlign = "left";
         
         // Récupération de l'image du portfolio
         const imageElement = document.createElement('img');

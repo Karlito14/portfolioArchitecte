@@ -1,6 +1,10 @@
 import { genererPortfolio } from './portfolio.js';
-const reponse = await fetch("http://localhost:5678/api/works");
-const portfolio = await reponse.json();
+
+async function fetchWorks() {
+    let result = await fetch('http://localhost:5678/api/works');
+    return await result.json();  
+}
+let portfolio = await fetchWorks();
 
 const reponse2 = await fetch('http://localhost:5678/api/categories');
 const categories = await reponse2.json();
@@ -86,7 +90,6 @@ window.addEventListener('keydown', (event) => {
     }
 })
 
-
 // Afficher les travaux dans la modal
 const afficherGalerieModale = (tableau) => {
     const galeriePhoto = document.querySelector('.galerie-photo');
@@ -135,13 +138,12 @@ const afficherGalerieModale = (tableau) => {
         const galeriePhoto = document.querySelector('.galerie-photo');
         galeriePhoto.appendChild(divImg);
     }
+    appelEventListenerCorbeille();
 }
 
 afficherGalerieModale(portfolio);
 
 // suppresion de travaux
-const elementsIconeCorbeille = document.querySelectorAll('.lien-corbeille');
-
 const supprimerTravaux = async (id) => {
     const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
         method: 'DELETE',
@@ -151,17 +153,20 @@ const supprimerTravaux = async (id) => {
     })
 }
 
-for (let i = 0; i < elementsIconeCorbeille.length; i++) {
-    elementsIconeCorbeille[i].addEventListener('click', (event) => {
-        event.preventDefault();
-        const travauxSelectionne = portfolio.filter(oeuvre => oeuvre.title.toLowerCase().replaceAll(' ', '-') === elementsIconeCorbeille[i].classList[0]);
-        const idImage = travauxSelectionne[0].id;
-        supprimerTravaux(idImage);
-        fermetureModal(modalGaleriePhoto);
-        const portfolioFiltre = portfolio.filter(oeuvre => oeuvre.id !== idImage);
-        genererPortfolio(portfolioFiltre);
-        afficherGalerieModale(portfolioFiltre);
-    })
+function appelEventListenerCorbeille() {
+    const elementsIconeCorbeille = document.querySelectorAll('.lien-corbeille');
+    for (let i = 0; i < elementsIconeCorbeille.length; i++) {        
+        elementsIconeCorbeille[i].addEventListener('click', async (event) => {
+            event.preventDefault();
+            const travauxSelectionne = portfolio.filter(oeuvre => oeuvre.title.toLowerCase().replaceAll(' ', '-') === elementsIconeCorbeille[i].classList[0]);
+            const idImage = travauxSelectionne[0].id;
+            supprimerTravaux(idImage);
+            fermetureModal(modalGaleriePhoto);
+            portfolio = await fetchWorks();
+            genererPortfolio(portfolio);
+            afficherGalerieModale(portfolio);
+        })
+    }
 }
 
 // Passer à la modal ajout photo
@@ -172,6 +177,7 @@ boutonAjouterPhoto.addEventListener('click', (event) => {
     event.preventDefault();
     fermetureModal(modalGaleriePhoto);
     ouvertureModal(modalAjoutPhoto);
+    addProject()
 })
 
 // retour en arrière à la modal galerie photo
@@ -188,6 +194,7 @@ modalAjoutPhoto.addEventListener('click', (event) => {
     fermetureModal(modalAjoutPhoto);
 })
 
+// Arreter la propagation lorsque qu'on clique sur l'interieur de la modale
 const wrapperAjoutPhoto = document.querySelector('.modal-wrapper-ajout-photo');
 wrapperAjoutPhoto.addEventListener('click', event => event.stopPropagation());
 
@@ -204,115 +211,121 @@ for (let categorie of categories) {
 }
 
 // Ajouter un projet au back end
+function addProject () {
+    const divAjouterPhoto = document.querySelector('.div-ajouter-photo');
+    const cloneDivAjouterPhoto = divAjouterPhoto.cloneNode(true);
+    const chargerImage = document.querySelector("#charger-image");
+    const titreImage = document.querySelector('#titre-photo');
+    const categorieImage = document.querySelector('#categorie-photo');
+    let fichier;
 
-// Création du FormData
-const formData = new FormData();
+    //Affichage de l'image choisie dans le formulaire
+    chargerImage.addEventListener('change', () => {
+        fichier = chargerImage.files[0];
+        const imageChargee = document.createElement('img');
+        const reader = new FileReader();
+        reader.readAsDataURL(fichier);
+        reader.onload = () => {
+            imageChargee.src = reader.result;
+        }
+        imageChargee.alt = fichier.name;
+        imageChargee.classList.add('image-chargee');
+        divAjouterPhoto.innerHTML = "";
+        divAjouterPhoto.appendChild(imageChargee);
+        divAjouterPhoto.style.padding = "0 20px";
+        changerCouleurBouttonValider();
+    })
 
-const divAjouterPhoto = document.querySelector('.div-ajouter-photo');
-const chargerImage = document.querySelector("#charger-image");
-const titreImage = document.querySelector('#titre-photo');
-const categorieImage = document.querySelector('#categorie-photo');
+    titreImage.addEventListener('change', () => {
+        changerCouleurBouttonValider();
+    })
 
-// Ajout de l'image dans le formdata une fois chargé
-chargerImage.addEventListener('change', () => {
-    const fichier = chargerImage.files[0];
-    const imageChargee = document.createElement('img');
-    const reader = new FileReader();
-    reader.readAsDataURL(fichier);
-    reader.onload = () => {
-        imageChargee.src = reader.result;
-    }
-    imageChargee.alt = fichier.name;
-    imageChargee.classList.add('image-chargee');
-    divAjouterPhoto.innerHTML = "";
-    divAjouterPhoto.appendChild(imageChargee);
-    divAjouterPhoto.style.padding = "0 20px";
-    formData.append('image', fichier, fichier.name);
-    changerCouleurBouttonValider();
-})
+    categorieImage.addEventListener('change', () => {
+        changerCouleurBouttonValider();
+    })
 
-// Ajout du titre et de la cateorie de l'image dans le formdata
-titreImage.addEventListener('change', () => {
-    formData.append('title', titreImage.value);
-    changerCouleurBouttonValider();
-})
-
-categorieImage.addEventListener('change', () => {
-    for (let categorie of categories) {
-        if (categorie.name === categorieImage.value) {
-            formData.append('category', categorie.id);
+    // changer la couleur du bouton valider si tout est bien rempli
+    const changerCouleurBouttonValider = () => {
+        if (titreImage.value && categorieImage.value && fichier) {
+            buttonValider.style.backgroundColor = "#1D6154";
+        } else {
+            buttonValider.style.backgroundColor = "#A7A7A7";
         }
     }
-    changerCouleurBouttonValider();
-})
 
-// changer la couleur du bouton valider si tout est bien rempli
-const changerCouleurBouttonValider = () => {
-    if (titreImage.value && categorieImage.value && chargerImage.files[0]) {
-        buttonValider.style.backgroundColor = "#1D6154";
-    } else {
-        buttonValider.style.backgroundColor = "#A7A7A7";
-    }
-}
+    const buttonValider = document.querySelector('.valider-ajout-projet');
 
-const buttonValider = document.querySelector('.valider-ajout-projet');
-
-buttonValider.addEventListener('click', async (event) => {
-    event.preventDefault();
-    const errorImageModal = document.querySelector('.error-image-modal');
-    errorImageModal.style.display = 'none';
-    const errorTitreModal = document.querySelector('.error-titre-modal');
-    errorTitreModal.style.display = 'none';
-    const errorCategorieModal = document.querySelector('.error-categorie-modal');
-    errorCategorieModal.style.display = 'none';
-    if (!titreImage.value || !categorieImage.value || !chargerImage.files[0]) {
-        if (!chargerImage.files[0]) {
-            errorImageModal.style.display = 'block';
-        }
-        if (!titreImage.value) {
-            errorTitreModal.style.display = 'block';
-        }
-        if (!categorieImage.value) {
-            errorCategorieModal.style.display = 'block';
-            categorieImage.style.marginBottom = '20px';
-        }
-    } else {
-        const reponse = fetch("http://localhost:5678/api/works", {
-            method: "POST",
-            headers: {
-                accept: "application/json",
-                authorization: `Bearer ${token}`
-            },
-            body: formData
-            })
-            .then(res => res.json())
-            .then(reponse => {
-                fermetureModal(modalAjoutPhoto);
-                let portfolioAJour = portfolio;
-                let categorieName;
-                for (let categorie of categories) {
-                    if (categorie.id === reponse.categoryId) {
-                        categorieName = categorie.name;
-                    }
+    buttonValider.addEventListener('click', async (event) => {
+        event.preventDefault();
+        const errorImageModal = document.querySelector('.error-image-modal');
+        errorImageModal.style.display = 'none';
+        const errorTitreModal = document.querySelector('.error-titre-modal');
+        errorTitreModal.style.display = 'none';
+        const errorCategorieModal = document.querySelector('.error-categorie-modal');
+        errorCategorieModal.style.display = 'none';
+        if (!titreImage.value || !categorieImage.value || !chargerImage.files[0]) {
+            if (!fichier) {
+                errorImageModal.style.display = 'block';
+            }
+            if (!titreImage.value) {
+                errorTitreModal.style.display = 'block';
+            }
+            if (!categorieImage.value) {
+                errorCategorieModal.style.display = 'block';
+                categorieImage.style.marginBottom = '20px';
+            }
+        } else {
+            const formData = new FormData();
+            formData.append('image', fichier, fichier.name);
+            formData.append('title', titreImage.value);
+            for (let categorie of categories) {
+                if (categorie.name === categorieImage.value) {
+                    formData.append('category', categorie.id);
                 }
-                portfolioAJour.push(
-                    {
-                        "id": reponse.id,
-                        "title": reponse.title,
-                        "imageUrl": reponse.imageUrl,
-                        "categoryId": reponse.categoryId,
-                        "userId": reponse.userId,
-                        "category":
-                        {
-                            "id": reponse.categoryId,
-                            "name": categorieName
+            }
+
+            const reponse = fetch("http://localhost:5678/api/works", {
+                method: "POST",
+                headers: {
+                    accept: "application/json",
+                    authorization: `Bearer ${token}`
+                },
+                body: formData
+                })
+                .then(res => res.json())
+                .then(reponse => {
+                    fermetureModal(modalAjoutPhoto);
+                    let categorieName;
+                    for (let categorie of categories) {
+                        if (categorie.id === reponse.categoryId) {
+                            categorieName = categorie.name;
                         }
                     }
-                )
-                genererPortfolio(portfolioAJour);
-                afficherGalerieModale(portfolioAJour);        
-            })
-            .catch(error => console.error(error))
-    }
-})
+                    portfolio.push(
+                        {
+                            "id": reponse.id,
+                            "title": reponse.title,
+                            "imageUrl": reponse.imageUrl,
+                            "categoryId": reponse.categoryId,
+                            "userId": reponse.userId,
+                            "category":
+                            {
+                                "id": reponse.categoryId,
+                                "name": categorieName
+                            }
+                        }
+                    )
+                    genererPortfolio(portfolio);
+                    afficherGalerieModale(portfolio);   
+                })
+                .catch(error => console.error(error));
+                // Remise à zéro du formulaire
+                titreImage.value = null;
+                categorieImage.value = null;
+                chargerImage.value = null 
+                divAjouterPhoto.replaceWith(cloneDivAjouterPhoto);
+        }
+    })
+}
+
 
