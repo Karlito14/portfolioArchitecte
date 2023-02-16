@@ -96,7 +96,6 @@ const afficherGalerieModale = (tableau) => {
     galeriePhoto.innerHTML = "";
     for (let i = 0; i < tableau.length; i++) {
         const work = tableau[i];
-
         const divImg = document.createElement('div');
 
         // Création de l'image avec la source
@@ -322,7 +321,7 @@ function addProject () {
                 // Remise à zéro du formulaire
                 titreImage.value = null;
                 categorieImage.value = null;
-                chargerImage.value = null 
+                chargerImage.value = null;
                 divAjouterPhoto.replaceWith(cloneDivAjouterPhoto);
         }
     })

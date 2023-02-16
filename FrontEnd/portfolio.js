@@ -60,14 +60,11 @@ for(let i = 0; i < elementButton.length; i++){
         event.preventDefault();
         // Si on selectionne le bouton avec #tous alors on genère le portfolio complet
         if(elementButton[i].id === "tous"){
-            gallery.innerHTML = "";
             genererPortfolio(portfolio);
         } else {
             // sinon on filtre le portfolio avec la catégorie qui possède le ID similaire au ID du button sélectionné 
             const portfolioFiltres = portfolio.filter(oeuvre =>
                 oeuvre.category.name.replaceAll(' ', '-') === elementButton[i].id) 
-            // Effacement de la page
-            gallery.innerHTML ="";
             // Regénération de la page filtrée
             genererPortfolio(portfolioFiltres);
         }   
