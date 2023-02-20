@@ -1,7 +1,15 @@
 // récupération de la valeur du token
-const token = window.localStorage.getItem('token');
+let token = window.localStorage.getItem('token');
 // Afichage des liens "modifier" dans le mode édition
 if(token){
+    // changement du lien login en logout
+    const login = document.querySelector('.login');
+    login.textContent = "logout"
+    login.addEventListener('click', (event) => {
+        event.preventDefault();
+        window.localStorage.removeItem("token");
+        window.location.replace('./login.html');
+    })
     // Effacement des catégories
     const listeFiltres = document.querySelector('.liste-filtres');
     listeFiltres.style.display ="none";
