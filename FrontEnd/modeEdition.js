@@ -8,7 +8,7 @@ if(token){
     login.addEventListener('click', (event) => {
         event.preventDefault();
         window.localStorage.removeItem("token");
-        window.location.replace('./login.html');
+        window.location.replace('./index.html');
     })
     // Effacement des catégories
     const listeFiltres = document.querySelector('.liste-filtres');

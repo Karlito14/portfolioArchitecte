@@ -48,11 +48,13 @@ const focusInModal = (event, modal) => {
     }
     focusables[index].focus();
 }
+if(token) {
+    lienOuvrirModal.addEventListener('click', (event) => {
+        event.preventDefault();
+        ouvertureModal(modalGaleriePhoto);
+    });
+}
 
-lienOuvrirModal.addEventListener('click', (event) => {
-    event.preventDefault();
-    ouvertureModal(modalGaleriePhoto);
-});
 
 for (let i = 0; i < croixFermetureModal.length; i++) {
     croixFermetureModal[i].addEventListener("click", (event) => {
@@ -65,6 +67,8 @@ for (let i = 0; i < croixFermetureModal.length; i++) {
         }
     });
 }
+
+// Pour fermer la modale en cliquant à l'extérieur du cadre blanc
 modalGaleriePhoto.addEventListener("click", (event) => {
     event.preventDefault();
     fermetureModal(modalGaleriePhoto);
